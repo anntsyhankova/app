@@ -3,44 +3,50 @@ package com.company.services;
 import com.company.entity.Product;
 import com.company.entity.User;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Random;
-
 public class SellService {
-    private Map<Product, Integer> store = new HashMap<>();
-
-    {
-        CatalogService.catalog.forEach(product ->
-                store.put(product, new Random().nextInt(10)));
-    }
+    private StorageService storageService = new StorageService();
+    private PriceListService priceListService = new PriceListService();
 
     private boolean isAvailable(Product product){
-        return store.containsKey(product);
+        return storageService.getStorageContent().containsKey(product);
     }
 
-    public boolean sell(Product product){
+    public boolean sell(User user, Product product){
         if (!isAvailable(product)) {
             return false;
         }
 
-        int current = store.get(product);
-        if (current > 0){
-            store.put(product, --current);
-            System.out.println(product + " sold");
-            return true;
+        int currentProduct = storageService.getStorageContent().get(product);
+        if (currentProduct > 0){
+            int price = priceListService.getPriceList().get(product);
+            if (user.getWallet() >= price){
+                System.out.println("Your money is " + user.getWallet());
+                System.out.println("Number of current product is " + currentProduct);
+                storageService.getStorageContent().put(product, --currentProduct);
+                user.setWallet(user.getWallet() - price);
+                System.out.println("Price of the " + product + " is " + price);
+                System.out.println("Your money is " + user.getWallet());
+                System.out.println("Number of current product is " + storageService.getStorageContent().get(product));
+                return true;
+            }
+            else {
+                System.err.println("You don't have enough money");
+                return false;
+            }
         }
-
-        return false;
+        else {
+            System.err.println(currentProduct + " is out");
+            return false;
+        }
     }
 
-    public boolean productInfo(Product product){
-        if (isAvailable(product)){
-            System.out.println(product + " quantity is " + store.get(product));
+    public boolean productInfo(Product productName){
+        if (isAvailable(productName)){
+            System.out.println(productName + " quantity is " + storageService.getStorageContent().get(productName));
             return true;
         }
         else {
-            System.out.println(product + " is out");
+            System.out.println(productName + " is out");
             return false;
         }
     }

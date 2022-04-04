@@ -3,6 +3,7 @@ package com.company.services;
 import com.company.entity.User;
 
 public final class AuthService {
+
     private static AuthService instance;
 
     private AuthService(){}

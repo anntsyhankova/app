@@ -1,5 +1,7 @@
 package com.company.entity;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
 public class Product {
@@ -7,10 +9,6 @@ public class Product {
 
     public Product(String name){
         this.name = name;
-    }
-
-    public String getName(){
-       return this.name;
     }
 
     @Override
@@ -28,6 +26,6 @@ public class Product {
 
     @Override
     public int hashCode(){
-        return Objects.hash(name);
+        return Objects.hash(this.name);
     }
 }

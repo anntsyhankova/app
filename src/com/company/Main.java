@@ -1,16 +1,18 @@
 package com.company;
 
+import com.company.entity.PriceList;
 import com.company.entity.Product;
 import com.company.entity.User;
 import com.company.services.AuthService;
-//import com.company.services.CatalogService;
 import com.company.services.CatalogService;
 import com.company.services.SellService;
 
 import java.util.Scanner;
 
 public class Main {
+
     static SellService sellService = new SellService();
+    static CatalogService catalogService = new CatalogService();
 
     public static void main(String[] args) {
         Scanner in = new Scanner(System.in);
@@ -22,17 +24,15 @@ public class Main {
         }
 
         while (true){
-            CatalogService.getInstance();
-            CatalogService.catalog.forEach(product -> System.out.println(product));
+            catalogService.getCatalog().catalogContent.forEach(product -> System.out.println(product));
 
-            Product product = new Product(in.nextLine());
-            if (!sellService.productInfo(product)){
+            Product productName = new Product(in.nextLine());
+            if (!sellService.sell(user, productName)){
                 return;
-            }
+           }
 //            if (!sellService.sell(product)){
 //                System.err.println("No product found");
 //                return;
-//            }
-        }
+            }
     }
 }
