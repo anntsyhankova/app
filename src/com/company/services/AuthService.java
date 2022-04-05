@@ -16,6 +16,10 @@ public final class AuthService {
     }
 
     public boolean auth(User user, String password){
-        return user.getName().equals("admin") && password.equals("password");
+        if (user.getName().equals("admin") && password.equals("password")){
+            UserHandler.currentUser = user;
+            return true;
+        }
+        return false;
     }
 }

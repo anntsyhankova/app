@@ -1,32 +1,27 @@
 package com.company.services;
 
 import com.company.entity.Product;
-import com.company.entity.User;
 
 public class SellService {
     private StorageService storageService = new StorageService();
     private PriceListService priceListService = new PriceListService();
+    private WalletService walletService = new WalletService();
 
-    private boolean isAvailable(Product product){
-        return storageService.getStorageContent().containsKey(product);
-    }
+    public boolean sell(Product product){
 
-    public boolean sell(User user, Product product){
-        if (!isAvailable(product)) {
+        if (!storageService.getStorageContent().containsKey(product)) {
+            System.err.println("We don't have this product");
             return false;
         }
 
         int currentProduct = storageService.getStorageContent().get(product);
+
         if (currentProduct > 0){
             int price = priceListService.getPriceList().get(product);
-            if (user.getWallet() >= price){
-                System.out.println("Your money is " + user.getWallet());
-                System.out.println("Number of current product is " + currentProduct);
+            if (walletService.getWallet() >= price){
                 storageService.getStorageContent().put(product, --currentProduct);
-                user.setWallet(user.getWallet() - price);
-                System.out.println("Price of the " + product + " is " + price);
-                System.out.println("Your money is " + user.getWallet());
-                System.out.println("Number of current product is " + storageService.getStorageContent().get(product));
+                walletService.addToWallet(-price);
+                System.out.println("You spent " + price + " on " + product.getName());
                 return true;
             }
             else {
@@ -35,20 +30,8 @@ public class SellService {
             }
         }
         else {
-            System.err.println(currentProduct + " is out");
+            System.err.println(product.getName() + " is out");
             return false;
         }
     }
-
-    public boolean productInfo(Product productName){
-        if (isAvailable(productName)){
-            System.out.println(productName + " quantity is " + storageService.getStorageContent().get(productName));
-            return true;
-        }
-        else {
-            System.out.println(productName + " is out");
-            return false;
-        }
-    }
-
 }

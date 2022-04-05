@@ -8,7 +8,7 @@ import java.util.List;
 public class Catalog {
 
     private static Catalog instance;
-    public List<Product> catalogContent = new ArrayList<>();
+    private List<Product> catalogContent = new ArrayList<>();
     private Long creationTime;
 
     private Catalog(){

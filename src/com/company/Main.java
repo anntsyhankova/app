@@ -1,5 +1,8 @@
 package com.company;
 
+import com.company.command.BuyCommand;
+import com.company.command.CommandProcessor;
+import com.company.command.InfoCommand;
 import com.company.entity.PriceList;
 import com.company.entity.Product;
 import com.company.entity.User;
@@ -23,16 +26,21 @@ public class Main {
             return;
         }
 
+        System.out.println("Select command: info, wallet, buy, exit");
+
+        CommandProcessor commandProcessor = new CommandProcessor();
+        while(true){
+            System.out.println("Enter command");
+            commandProcessor.process(in.nextLine());
+        }
+/*
         while (true){
             catalogService.getCatalog().catalogContent.forEach(product -> System.out.println(product));
 
             Product productName = new Product(in.nextLine());
             if (!sellService.sell(user, productName)){
                 return;
-           }
-//            if (!sellService.sell(product)){
-//                System.err.println("No product found");
-//                return;
             }
+        }*/
     }
 }
