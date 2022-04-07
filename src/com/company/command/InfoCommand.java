@@ -8,14 +8,40 @@ import com.company.services.StorageService;
 import java.util.List;
 import java.util.Scanner;
 
-public class InfoCommand extends Command{
+public class InfoCommand implements CommandProcessor {
 
     private CatalogService catalogService = new CatalogService();
     private PriceListService priceListService = new PriceListService();
     private StorageService storageService = new StorageService();
 
+    private void printInfo(Product product){
+        System.out.println("_____________");
+        System.out.println("Price of the " + product.getName() + " is "
+                + priceListService.getPriceList().get(product));
+        System.out.println("The number of " + product.getName() + " in storage is "
+                + storageService.getStorageContent().get(product));
+    }
+
+    private boolean executeWithArgs(Command command) {
+
+        for (int i = 0; i < command.args().size(); i++) {
+            Product product = new Product(command.args().get(i));
+            if (catalogService.getCatalog().getCatalogContent().contains(product)) {
+                printInfo(product);
+            } else {
+                System.err.println("Product " + product.getName() + " doesn't exist in storage");
+            }
+        }
+        return true;
+    }
+
     @Override
-    public boolean execute() {
+    public boolean execute(Command command) {
+        if (command.args().size() != 0){
+            executeWithArgs(command);
+            return true;
+        }
+
         System.out.println("Select product: " + catalogService.getCatalog().getCatalogContent());
         Scanner in = new Scanner(System.in);
         Product productName = new Product(in.nextLine());
@@ -29,10 +55,7 @@ public class InfoCommand extends Command{
             return false;
         }
         else {
-            System.out.println("Price of the " + productName + " is "
-                    + priceListService.getPriceList().get(productName));
-            System.out.println("The number of " + productName + " in storage is "
-                    + storageService.getStorageContent().get(productName));
+            printInfo(productName);
             return true;
         }
     }

@@ -1,21 +1,12 @@
 package com.company;
 
-import com.company.command.BuyCommand;
-import com.company.command.CommandProcessor;
-import com.company.command.InfoCommand;
-import com.company.entity.PriceList;
-import com.company.entity.Product;
+import com.company.command.CommandDispatcher;
 import com.company.entity.User;
 import com.company.services.AuthService;
-import com.company.services.CatalogService;
-import com.company.services.SellService;
 
 import java.util.Scanner;
 
 public class Main {
-
-    static SellService sellService = new SellService();
-    static CatalogService catalogService = new CatalogService();
 
     public static void main(String[] args) {
         Scanner in = new Scanner(System.in);
@@ -26,21 +17,14 @@ public class Main {
             return;
         }
 
-        System.out.println("Select command: info, wallet, buy, exit");
+        System.out.println("Select command: info, wallet, buy, exit, help, balance");
 
-        CommandProcessor commandProcessor = new CommandProcessor();
+        CommandDispatcher commandProcessor = new CommandDispatcher();
         while(true){
+            System.out.println("_____________");
             System.out.println("Enter command");
+            System.out.println("_____________");
             commandProcessor.process(in.nextLine());
         }
-/*
-        while (true){
-            catalogService.getCatalog().catalogContent.forEach(product -> System.out.println(product));
-
-            Product productName = new Product(in.nextLine());
-            if (!sellService.sell(user, productName)){
-                return;
-            }
-        }*/
     }
 }
